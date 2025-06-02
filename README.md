@@ -120,3 +120,25 @@ for output in algo.get_outputs():
     # Export it to JSON
     output.to_json()
 ```
+
+## :fast_forward: Advanced usage 
+
+## :wrench: System Prompt Configuration
+
+The system prompt defines the initial behavior and context given to the model. You can customize it by modifying the `SYSTEM_MESSAGE` variable in `configs/system_configs.py`:
+
+```python
+# configs/system_configs.py
+SYSTEM_MESSAGE = """
+You are a helpful assistant.
+"""
+```
+
+To change the model's behavior or give it specific instructions, simply modify this system message. For example, you could make it more specific to your use case:
+
+```python
+SYSTEM_MESSAGE = """
+You are a computer vision expert specialized in detailed image analysis. 
+Always provide structured, comprehensive descriptions of visual content.
+"""
+```

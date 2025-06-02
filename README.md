@@ -123,7 +123,7 @@ for output in algo.get_outputs():
 
 ## :fast_forward: Advanced usage 
 
-## :wrench: System Prompt Configuration
+### :wrench: System Prompt Configuration
 
 The system prompt defines the initial behavior and context given to the model. You can customize it by modifying the `SYSTEM_MESSAGE` variable in `configs/system_configs.py`:
 

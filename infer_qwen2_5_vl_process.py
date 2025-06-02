@@ -1,7 +1,5 @@
 import copy
 import os
-import json
-import time
 import torch
 
 from datetime import datetime
@@ -29,7 +27,6 @@ class InferQwen25VlParam(core.CWorkflowTaskParam):
         self.top_p = 0.001
         self.top_k = 1
         self.repetition_penalty = 1.0
-        self.output_folder = ""
         self.update = False
 
     def set_values(self, param_map):
@@ -43,7 +40,6 @@ class InferQwen25VlParam(core.CWorkflowTaskParam):
         self.top_p = float(param_map["top_p"])
         self.top_k = int(param_map["top_k"])
         self.repetition_penalty = float(param_map["repetition_penalty"])
-        self.output_folder = str(param_map["output_folder"])
         self.update = True
 
     def get_values(self):
@@ -58,7 +54,6 @@ class InferQwen25VlParam(core.CWorkflowTaskParam):
         param_map["top_p"] = str(self.top_p)
         param_map["top_k"] = str(self.top_k)
         param_map["repetition_penalty"] = str(self.repetition_penalty)
-        param_map["output_folder"] = str(self.output_folder)
         param_map["cuda"] = str(self.cuda)
         return param_map
 
@@ -128,13 +123,6 @@ class InferQwen25Vl(dataprocess.C2dImageTask):
                 max_pixels=self.max_pixels,
                 cache_dir=self.model_folder
             )
-
-        # Create output directory if it doesn't exist
-        if param.output_folder == "":
-            date_time = datetime.now().strftime('%Y%m%d_%H%M%S')
-            param.output_folder = os.path.join(
-                self.base_dir, "results", date_time)
-        os.makedirs(param.output_folder, exist_ok=True)
 
         messages = [
             {

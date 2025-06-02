@@ -196,7 +196,7 @@ class InferQwen25VlFactory(dataprocess.CTaskFactory):
         # relative path -> as displayed in Ikomia Studio algorithm tree
         self.info.path = "Plugins/Python/VLM"
         self.info.version = "1.0.0"
-        # self.info.icon_path = "your path to a specific icon"
+        self.info.icon_path = "images/icon.png"
         self.info.authors =     "Bai, Shuai and Chen, Keqin and Liu, Xuejing and Wang, Jialin and Ge, " \
                                 "Wenbin and Song, Sibo and Dang, Kai and Wang, Peng and Wang, Shijie and Tang, " \
                                 "Jun and Zhong, Humen and Zhu, Yuanzhi and Yang, Mingkun and Li, " \

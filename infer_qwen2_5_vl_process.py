@@ -66,9 +66,7 @@ class InferQwen25Vl(dataprocess.C2dImageTask):
 
     def __init__(self, name, param):
         dataprocess.C2dImageTask.__init__(self, name)
-        # Add input/output of the algorithm here
-        # Example :  self.add_input(dataprocess.CImageIO())
-        #           self.add_output(dataprocess.CImageIO())
+        self.add_output(dataprocess.DataDictIO())
 
         # Create parameters object
         if param is None:
@@ -100,6 +98,9 @@ class InferQwen25Vl(dataprocess.C2dImageTask):
         # Get input image (np array):
         input = self.get_input(0)
         image_path = input.source_file_path
+
+         # Set output
+        output_dict = self.get_output(1)       
 
         # Get parameters
         param = self.get_param_object()
@@ -171,6 +172,10 @@ class InferQwen25Vl(dataprocess.C2dImageTask):
         )[0]
 
         print(output_text)
+
+        output_dict.data = {
+                            "reponse:": output_text,
+                                }
 
         # Step progress bar (Ikomia Studio):
         self.emit_step_progress()

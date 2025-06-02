@@ -1,0 +1,1 @@
+# infer_qwen2_5_vl

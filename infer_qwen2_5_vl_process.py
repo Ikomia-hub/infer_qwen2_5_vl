@@ -2,7 +2,6 @@ import copy
 import os
 import torch
 
-from datetime import datetime
 from ikomia import core, dataprocess, utils
 
 from qwen_vl_utils import process_vision_info
@@ -99,7 +98,7 @@ class InferQwen25Vl(dataprocess.C2dImageTask):
         input = self.get_input(0)
         image_path = input.source_file_path
 
-         # Set output
+        # Set output
         output_dict = self.get_output(1)       
 
         # Get parameters
@@ -193,7 +192,7 @@ class InferQwen25VlFactory(dataprocess.CTaskFactory):
         dataprocess.CTaskFactory.__init__(self)
         # Set algorithm information/metadata here
         self.info.name = "infer_qwen2_5_vl"
-        self.info.short_description = "your short description"
+        self.info.short_description = "Run vision-language model series based on Qwen2.5"
         # relative path -> as displayed in Ikomia Studio algorithm tree
         self.info.path = "Plugins/Python/VLM"
         self.info.version = "1.0.0"

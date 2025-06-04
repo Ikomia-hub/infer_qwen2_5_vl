@@ -1,7 +1,7 @@
 import copy
 import os
 import torch
-
+from PIL import Image
 from ikomia import core, dataprocess, utils
 
 from qwen_vl_utils import process_vision_info
@@ -96,7 +96,12 @@ class InferQwen25Vl(dataprocess.C2dImageTask):
 
         # Get input image (np array):
         input = self.get_input(0)
-        image_path = input.source_file_path
+
+        # Get image from input/output (numpy array):
+        src_image = input.get_image()
+
+        # transform image to PIL format
+        src_image = Image.fromarray(src_image)
 
         # Set output
         output_dict = self.get_output(1)       
@@ -134,7 +139,7 @@ class InferQwen25Vl(dataprocess.C2dImageTask):
             {
                 "role": "user",
                 "content": [
-                    {"type": "image", "image": image_path},
+                    {"type": "image", "image": src_image},
                     {"type": "text", "text": param.prompt},
                 ],
             }

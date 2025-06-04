@@ -60,13 +60,15 @@ Ikomia Studio offers a friendly UI with the same features as the API.
 |----------------------|-------------|
 | `input_path`       | Path to a single PDF file to process or to a directory containing multiple PDFs. |
 | `model_name`       | Name or path of the Qwen VL model. Default: `"Qwen/Qwen2.5-VL-7B-Instruct"`. |
+| `prompt`          | Custom prompt to guide the model's response for the given image. Default: `"Describe the image in detail."` |
+| `system_prompt`   | System prompt to set the behavior and context for the model. Default: `"You are a helpful assistant."` |
 | `cuda`             | If True, CUDA-based inference (GPU). If False, run on CPU. |
 | `do_sample`       | Whether or not to use sampling ; use greedy decoding otherwise (return the word/token which has the highest probability). If set to `True`, token validation incorporates resampling for generating more diverse outputs. Acceptable values are `True` or `False`. Default: `False`. |
 | `max_new_tokens`  | The maximum numbers of tokens to generate, ignoring the number of tokens in the prompt. Default: `1280`. *(For `essais` reports, reducing this value can significantly speed up inference time. Lower values are recommended for `essais` to mitigate hallucinations.)* |
 | `temperature`     | Sampling temperature for text generation. Default: `1`. *(Only used if `--do_sample=True`.)* |
 | `top_p`           | Top-p sampling parameter. Default: `1`. *(Only used if `--do_sample=True`.)* |
 | `top_k`           | Top-k sampling parameter. Default: `50`. *(Only used if `--do_sample=True`.)* |
-| `repetition_penalty` | The parameter for repetition penalty. 1.0 means no penalty. . Default: `1.2`.|
+| `repetition_penalty` | The parameter for repetition penalty. 1.0 means no penalty. . Default: `1.0`.|
 
 
 ```python
@@ -119,26 +121,4 @@ for output in algo.get_outputs():
     print(output)
     # Export it to JSON
     output.to_json()
-```
-
-## :fast_forward: Advanced usage 
-
-### :wrench: System Prompt Configuration
-
-The system prompt defines the initial behavior and context given to the model. You can customize it by modifying the `SYSTEM_MESSAGE` variable in `configs/system_configs.py`:
-
-```python
-# configs/system_configs.py
-SYSTEM_MESSAGE = """
-You are a helpful assistant.
-"""
-```
-
-To change the model's behavior or give it specific instructions, simply modify this system message. For example, you could make it more specific to your use case:
-
-```python
-SYSTEM_MESSAGE = """
-You are a computer vision expert specialized in detailed image analysis. 
-Always provide structured, comprehensive descriptions of visual content.
-"""
 ```

@@ -30,6 +30,7 @@ class InferQwen25VlWidget(core.CWorkflowTaskWidget):
         
                 # Prompt
         self.edit_prompt = pyqtutils.append_edit(self.grid_layout, "Prompt", self.parameters.prompt)
+        self.edit_system_prompt = pyqtutils.append_edit(self.grid_layout, "System Prompt", self.parameters.system_prompt)
 
         # Cuda
         self.check_cuda = pyqtutils.append_check(
@@ -67,6 +68,7 @@ class InferQwen25VlWidget(core.CWorkflowTaskWidget):
         # Update parameters from widget values
         self.parameters.model_name = self.edit_model.text()
         self.parameters.prompt = self.edit_prompt.text()
+        self.parameters.system_prompt = self.edit_system_prompt.text()
         self.parameters.cuda = self.check_cuda.isChecked()
         self.parameters.max_new_tokens = self.spin_max_new_tokens.value()
         self.parameters.do_sample = self.check_do_sample.isChecked()

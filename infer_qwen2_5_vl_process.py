@@ -5,7 +5,6 @@ from PIL import Image
 from ikomia import core, dataprocess, utils
 
 from qwen_vl_utils import process_vision_info
-from infer_qwen2_5_vl.configs.system_configs import SYSTEM_MESSAGE
 from transformers import AutoModelForImageTextToText, AutoProcessor
 
 
@@ -20,11 +19,12 @@ class InferQwen25VlParam(core.CWorkflowTaskParam):
         self.model_name = "Qwen/Qwen2.5-VL-3B-Instruct"
         self.cuda = torch.cuda.is_available()
         self.prompt = 'Describe the image in detail.'
+        self.system_prompt = 'You are a helpful assistant.'
         self.max_new_tokens = 512
         self.do_sample = False
-        self.temperature = 0.01
-        self.top_p = 0.001
-        self.top_k = 1
+        self.temperature = 1
+        self.top_p = 1
+        self.top_k = 50
         self.repetition_penalty = 1.0
         self.update = False
 
@@ -33,6 +33,7 @@ class InferQwen25VlParam(core.CWorkflowTaskParam):
         self.model_name = str(param_map["model_name"])
         self.cuda = utils.strtobool(param_map["cuda"])
         self.prompt = str(param_map["prompt"])
+        self.system_prompt = str(param_map["system_prompt"])
         self.do_sample = utils.strtobool(param_map["do_sample"])
         self.max_new_tokens = int(param_map["max_new_tokens"])
         self.temperature = float(param_map["temperature"])
@@ -47,6 +48,7 @@ class InferQwen25VlParam(core.CWorkflowTaskParam):
         param_map = {}
         param_map["model_name"] = str(self.model_name)
         param_map["prompt"] = str(self.prompt)
+        param_map["system_prompt"] = str(self.system_prompt)
         param_map["max_new_tokens"] = str(self.max_new_tokens)
         param_map["do_sample"] = str(self.do_sample)
         param_map["temperature"] = str(self.temperature)
@@ -133,7 +135,7 @@ class InferQwen25Vl(dataprocess.C2dImageTask):
             {
                 "role": "system",
                 "content": [
-                    {"type": "text", "text": SYSTEM_MESSAGE},
+                    {"type": "text", "text": param.system_prompt},
                 ],
             },
             {

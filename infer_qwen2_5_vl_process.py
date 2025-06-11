@@ -215,8 +215,11 @@ class InferQwen25VlFactory(dataprocess.CTaskFactory):
         self.info.year = 2025
         self.info.license = "Apache 2.0"
 
+        # Ikomia API compatibility
+        self.info.min_ikomia_version = "0.13.0"
+
         # Python compatibility
-        self.info.max_python_version = "3.11.0"
+        self.info.min_python_version = "3.11.0"
 
         # URL of documentation
         self.info.documentation_link = "https://arxiv.org/abs/2502.13923"

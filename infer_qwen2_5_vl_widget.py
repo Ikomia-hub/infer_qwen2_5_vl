@@ -78,6 +78,9 @@ class InferQwen25VlWidget(core.CWorkflowTaskWidget):
         self.parameters.repetition_penalty = self.spin_repetition_penalty.value()
         self.parameters.update = True
 
+        # Send signal to launch the process
+        self.emit_apply(self.parameters)
+
 # --------------------
 # - Factory class to build algorithm widget object
 # - Inherits PyDataProcess.CWidgetFactory from Ikomia API

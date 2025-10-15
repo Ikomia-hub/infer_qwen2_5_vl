@@ -31,7 +31,7 @@ class InferQwen25VlParam(core.CWorkflowTaskParam):
 
     def set_values(self, param_map):
         # Set parameters values from Ikomia Studio or API
-        self.update = (self.model_name != params["model_name"] or self.cuda != utils.strtobool(params["cuda"]))
+        self.update = (self.model_name != param_map["model_name"] or self.cuda != utils.strtobool(param_map["cuda"]))
         self.model_name = str(param_map["model_name"])
         self.cuda = utils.strtobool(param_map["cuda"])
         self.prompt = str(param_map["prompt"])
@@ -245,10 +245,10 @@ class InferQwen25VlFactory(dataprocess.CTaskFactory):
         self.info.algo_type = core.AlgoType.OTHER
 
         # Min hardware config
-        self.info.hardware_config.min_cpu = 4
-        self.info.hardware_config.min_ram = 16
-        self.info.hardware_config.gpu_required = False
-        self.info.hardware_config.min_vram = 6
+        # self.info.hardware_config.min_cpu = 4
+        # self.info.hardware_config.min_ram = 16
+        # self.info.hardware_config.gpu_required = False
+        # self.info.hardware_config.min_vram = 6
 
 
     def create(self, param=None):

@@ -31,7 +31,6 @@ class InferQwen25VlParam(core.CWorkflowTaskParam):
 
     def set_values(self, param_map):
         # Set parameters values from Ikomia Studio or API
-        self.update = (self.model_name != param_map["model_name"] or self.cuda != utils.strtobool(param_map["cuda"]))
         self.model_name = str(param_map["model_name"])
         self.cuda = utils.strtobool(param_map["cuda"])
         self.prompt = str(param_map["prompt"])
@@ -42,6 +41,7 @@ class InferQwen25VlParam(core.CWorkflowTaskParam):
         self.top_p = float(param_map["top_p"])
         self.top_k = int(param_map["top_k"])
         self.repetition_penalty = float(param_map["repetition_penalty"])
+        self.update = True
 
     def get_values(self):
         # Send parameters values to Ikomia Studio or API
@@ -95,7 +95,6 @@ class InferQwen25Vl(dataprocess.C2dImageTask):
         self.device = torch.device(
             "cuda") if param.cuda and torch.cuda.is_available() else torch.device("cpu")
         torch_tensor_dtype = torch.float16 if param.cuda and torch.cuda.is_available() else torch.float32
-        param.update = False
         # Initialize model and processor
         self.model = AutoModelForImageTextToText.from_pretrained(
             param.model_name,
@@ -242,13 +241,13 @@ class InferQwen25VlFactory(dataprocess.CTaskFactory):
         self.info.keywords = "VLM,Qwen,Qwen2.5,VL,Vision-Language"
 
         # General type: INFER, TRAIN, DATASET or OTHER
-        self.info.algo_type = core.AlgoType.OTHER
+        self.info.algo_type = core.AlgoType.INFER
 
-        # Min hardware config
-        # self.info.hardware_config.min_cpu = 4
-        # self.info.hardware_config.min_ram = 16
-        # self.info.hardware_config.gpu_required = False
-        # self.info.hardware_config.min_vram = 6
+        Min hardware config
+        self.info.hardware_config.min_cpu = 4
+        self.info.hardware_config.min_ram = 16
+        self.info.hardware_config.gpu_required = False
+        self.info.hardware_config.min_vram = 6
 
 
     def create(self, param=None):

@@ -46,7 +46,7 @@ class InferQwen25VlWidget(core.CWorkflowTaskWidget):
 
         # Temperature
         self.spin_temperature = pyqtutils.append_double_spin(
-            self.grid_layout, "Temperature", self.parameters.temperature, min=0.0, max=1.0, step=0.01, decimals=2)
+            self.grid_layout, "Temperature", self.parameters.temperature, min=0.0, max=10.0, step=0.1, decimals=2)
 
         # Top P
         self.spin_top_p = pyqtutils.append_double_spin(

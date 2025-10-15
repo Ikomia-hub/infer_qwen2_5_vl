@@ -16,9 +16,8 @@ class InferQwen25VlParam(core.CWorkflowTaskParam):
 
     def __init__(self):
         core.CWorkflowTaskParam.__init__(self)
-        self.update = False
-        self.update = (self.model_name = "Qwen/Qwen2.5-VL-3B-Instruct" or \
-                       self.cuda = torch.cuda.is_available())
+        self.model_name = "Qwen/Qwen2.5-VL-3B-Instruct"
+        self.cuda = torch.cuda.is_available()
         self.prompt = 'Describe the image in detail.'
         self.system_prompt = 'You are a helpful assistant.'
         self.max_new_tokens = 512
@@ -27,10 +26,12 @@ class InferQwen25VlParam(core.CWorkflowTaskParam):
         self.top_p = 1
         self.top_k = 50
         self.repetition_penalty = 1.0
+        self.update = False
         
 
     def set_values(self, param_map):
         # Set parameters values from Ikomia Studio or API
+        self.update = (self.model_name != params["model_name"] or self.cuda != utils.strtobool(params["cuda"]))
         self.model_name = str(param_map["model_name"])
         self.cuda = utils.strtobool(param_map["cuda"])
         self.prompt = str(param_map["prompt"])
@@ -41,7 +42,6 @@ class InferQwen25VlParam(core.CWorkflowTaskParam):
         self.top_p = float(param_map["top_p"])
         self.top_k = int(param_map["top_k"])
         self.repetition_penalty = float(param_map["repetition_penalty"])
-        self.update = True
 
     def get_values(self):
         # Send parameters values to Ikomia Studio or API
@@ -247,7 +247,7 @@ class InferQwen25VlFactory(dataprocess.CTaskFactory):
         # Min hardware config
         self.info.hardware_config.min_cpu = 4
         self.info.hardware_config.min_ram = 16
-        self.info.hardware_config.gpu_required = True
+        self.info.hardware_config.gpu_required = False
         self.info.hardware_config.min_vram = 6
 
 

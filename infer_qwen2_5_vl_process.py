@@ -242,6 +242,7 @@ class InferQwen25VlFactory(dataprocess.CTaskFactory):
 
         # General type: INFER, TRAIN, DATASET or OTHER
         self.info.algo_type = core.AlgoType.INFER
+        self.info.algo_tasks = "VLM"
 
         # Min hardware config
         self.info.hardware_config.min_cpu = 4

@@ -58,13 +58,12 @@ Ikomia Studio offers a friendly UI with the same features as the API.
 ## :pencil: Set algorithm parameters
 | Parameters             | Description |
 |----------------------|-------------|
-| `input_path`       | Path to a single PDF file to process or to a directory containing multiple PDFs. |
-| `model_name`       | Name or path of the Qwen VL model. Default: `"Qwen/Qwen2.5-VL-7B-Instruct"`. |
+| `model_name`       | Name or path of the Qwen VL model. Default: `"Qwen/Qwen2.5-VL-3B-Instruct"`. |
 | `prompt`          | Custom prompt to guide the model's response for the given image. Default: `"Describe the image in detail."` |
 | `system_prompt`   | System prompt to set the behavior and context for the model. Default: `"You are a helpful assistant."` |
 | `cuda`             | If True, CUDA-based inference (GPU). If False, run on CPU. |
 | `do_sample`       | Whether or not to use sampling ; use greedy decoding otherwise (return the word/token which has the highest probability). If set to `True`, token validation incorporates resampling for generating more diverse outputs. Acceptable values are `True` or `False`. Default: `False`. |
-| `max_new_tokens`  | The maximum numbers of tokens to generate, ignoring the number of tokens in the prompt. Default: `1280`. *(For `essais` reports, reducing this value can significantly speed up inference time. Lower values are recommended for `essais` to mitigate hallucinations.)* |
+| `max_new_tokens`  | The maximum numbers of tokens to generate, ignoring the number of tokens in the prompt. Default: `512`. *(For `essais` reports, reducing this value can significantly speed up inference time. Lower values are recommended for `essais` to mitigate hallucinations.)* |
 | `temperature`     | Sampling temperature for text generation. Default: `1`. *(Only used if `--do_sample=True`.)* |
 | `top_p`           | Top-p sampling parameter. Default: `1`. *(Only used if `--do_sample=True`.)* |
 | `top_k`           | Top-k sampling parameter. Default: `50`. *(Only used if `--do_sample=True`.)* |

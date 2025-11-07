@@ -27,6 +27,7 @@ class InferQwen25VlParam(core.CWorkflowTaskParam):
         self.top_k = 50
         self.repetition_penalty = 1.0
         self.update = False
+        
 
     def set_values(self, param_map):
         # Set parameters values from Ikomia Studio or API
@@ -89,6 +90,31 @@ class InferQwen25Vl(dataprocess.C2dImageTask):
         # This is handled by the main progress bar of Ikomia Studio
         return 1
 
+    def load_model(self):
+        param = self.get_param_object()
+        self.device = torch.device(
+            "cuda") if param.cuda and torch.cuda.is_available() else torch.device("cpu")
+        torch_tensor_dtype = torch.float16 if param.cuda and torch.cuda.is_available() else torch.float32
+        # Initialize model and processor
+        self.model = AutoModelForImageTextToText.from_pretrained(
+            param.model_name,
+            torch_dtype=torch_tensor_dtype,
+            device_map=self.device,
+            cache_dir=self.model_folder
+        )
+        self.processor = AutoProcessor.from_pretrained(
+            param.model_name,
+            min_pixels=self.min_pixels,
+            max_pixels=self.max_pixels,
+            cache_dir=self.model_folder
+        )
+
+        param.update = False
+
+    def init_long_process(self):
+        self.load_model()
+        super().init_long_process()
+
     def run(self):
         # Main function of your algorithm
         # Call begin_task_run() for initialization
@@ -97,39 +123,22 @@ class InferQwen25Vl(dataprocess.C2dImageTask):
         param = self.get_param_object()
 
         # Get input image (np array):
-        input = self.get_input(0)
+        img_input = self.get_input(0)
 
         # Get image from input/output (numpy array):
-        src_image = input.get_image()
+        src_image = img_input.get_image()
 
         # transform image to PIL format
         src_image = Image.fromarray(src_image)
 
         # Set output
-        output_dict = self.get_output(1)       
+        output_dict = self.get_output(1)
+
+        if param.update:
+            self.load_model()       
 
         # Get parameters
         param = self.get_param_object()
-
-        if self.model is None or self.model_name != param.model_name:
-            self.device = torch.device(
-                "cuda") if param.cuda and torch.cuda.is_available() else torch.device("cpu")
-            torch_tensor_dtype = torch.float16 if param.cuda and torch.cuda.is_available() else torch.float32
-            param.update = False
-            # Initialize model and processor
-            self.model = AutoModelForImageTextToText.from_pretrained(
-                param.model_name,
-                torch_dtype=torch_tensor_dtype,
-                device_map=self.device,
-                cache_dir=self.model_folder
-            )
-
-            self.processor = AutoProcessor.from_pretrained(
-                param.model_name,
-                min_pixels=self.min_pixels,
-                max_pixels=self.max_pixels,
-                cache_dir=self.model_folder
-            )
 
         messages = [
             {
@@ -202,7 +211,7 @@ class InferQwen25VlFactory(dataprocess.CTaskFactory):
         self.info.short_description = "Run vision-language model series based on Qwen2.5"
         # relative path -> as displayed in Ikomia Studio algorithm tree
         self.info.path = "Plugins/Python/VLM"
-        self.info.version = "1.0.0"
+        self.info.version = "1.1.0"
         self.info.icon_path = "images/icon.png"
         self.info.authors =     "Bai, Shuai and Chen, Keqin and Liu, Xuejing and Wang, Jialin and Ge, " \
                                 "Wenbin and Song, Sibo and Dang, Kai and Wang, Peng and Wang, Shijie and Tang, " \
@@ -232,7 +241,14 @@ class InferQwen25VlFactory(dataprocess.CTaskFactory):
         self.info.keywords = "VLM,Qwen,Qwen2.5,VL,Vision-Language"
 
         # General type: INFER, TRAIN, DATASET or OTHER
-        self.info.algo_type = core.AlgoType.OTHER
+        self.info.algo_type = core.AlgoType.INFER
+        self.info.algo_tasks = "VLM"
+
+        # Min hardware config
+        self.info.hardware_config.min_cpu = 4
+        self.info.hardware_config.min_ram = 16
+        self.info.hardware_config.gpu_required = False
+        self.info.hardware_config.min_vram = 6
 
 
     def create(self, param=None):

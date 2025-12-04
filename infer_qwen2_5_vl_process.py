@@ -211,7 +211,7 @@ class InferQwen25VlFactory(dataprocess.CTaskFactory):
         self.info.short_description = "Run vision-language model series based on Qwen2.5"
         # relative path -> as displayed in Ikomia Studio algorithm tree
         self.info.path = "Plugins/Python/VLM"
-        self.info.version = "1.1.0"
+        self.info.version = "1.1.1"
         self.info.icon_path = "images/icon.png"
         self.info.authors =     "Bai, Shuai and Chen, Keqin and Liu, Xuejing and Wang, Jialin and Ge, " \
                                 "Wenbin and Song, Sibo and Dang, Kai and Wang, Peng and Wang, Shijie and Tang, " \

@@ -1,11 +1,14 @@
 import copy
 import os
+
 import torch
 from PIL import Image
+from transformers import AutoModelForImageTextToText, AutoProcessor
+
 from ikomia import core, dataprocess, utils
+from ikomia.dataprocess.io.datadictIO import DataDictIO
 
 from qwen_vl_utils import process_vision_info
-from transformers import AutoModelForImageTextToText, AutoProcessor
 
 
 # --------------------
@@ -46,17 +49,18 @@ class InferQwen25VlParam(core.CWorkflowTaskParam):
     def get_values(self):
         # Send parameters values to Ikomia Studio or API
         # Create the specific dict structure (string container)
-        param_map = {}
-        param_map["model_name"] = str(self.model_name)
-        param_map["prompt"] = str(self.prompt)
-        param_map["system_prompt"] = str(self.system_prompt)
-        param_map["max_new_tokens"] = str(self.max_new_tokens)
-        param_map["do_sample"] = str(self.do_sample)
-        param_map["temperature"] = str(self.temperature)
-        param_map["top_p"] = str(self.top_p)
-        param_map["top_k"] = str(self.top_k)
-        param_map["repetition_penalty"] = str(self.repetition_penalty)
-        param_map["cuda"] = str(self.cuda)
+        param_map = {
+            "model_name": str(self.model_name),
+            "prompt": str(self.prompt),
+            "system_prompt": str(self.system_prompt),
+            "max_new_tokens": str(self.max_new_tokens),
+            "do_sample": str(self.do_sample),
+            "temperature": str(self.temperature),
+            "top_p": str(self.top_p),
+            "top_k": str(self.top_k),
+            "repetition_penalty": str(self.repetition_penalty),
+            "cuda": str(self.cuda)
+        }
         return param_map
 
 
@@ -68,7 +72,7 @@ class InferQwen25Vl(dataprocess.C2dImageTask):
 
     def __init__(self, name, param):
         dataprocess.C2dImageTask.__init__(self, name)
-        self.add_output(dataprocess.DataDictIO())
+        self.add_output(DataDictIO())
 
         # Create parameters object
         if param is None:
